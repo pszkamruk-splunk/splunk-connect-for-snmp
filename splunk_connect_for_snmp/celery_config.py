@@ -16,6 +16,8 @@
 # Support use of .env file for developers
 from contextlib import suppress
 
+from kombu import Queue, Exchange
+
 with suppress(ImportError):
     from dotenv import load_dotenv
 
@@ -44,9 +46,8 @@ mongodb_scheduler_db = MONGO_DB_CELERY_DATABASE
 # Optimization for long running tasks
 # https://docs.celeryproject.org/en/stable/userguide/optimizing.html#reserve-one-task-at-a-time
 task_acks_late = True
-worker_prefetch_multiplier = 1
+worker_prefetch_multiplier = 30
 task_acks_on_failure_or_timeout = True
 task_reject_on_worker_lost = True
-task_track_started = True
 task_time_limit = 2400
 task_ignore_result = True
