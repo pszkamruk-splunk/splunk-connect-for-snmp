@@ -91,7 +91,6 @@ def load():
     )
     logger.info(f"Loading inventory from {INVENTORY_PATH}")
     inventory_lines = inventory_processor.get_all_hosts()
-    print(inventory_lines)
 
     # Function to delete inventory records that are
     hosts_from_groups_to_delete = return_hosts_from_deleted_groups(
