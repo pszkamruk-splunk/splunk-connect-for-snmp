@@ -38,7 +38,7 @@ spec:
               value: {{ include "splunk-connect-for-snmp.mongo_uri" . }}
           volumeMounts:
           - name: shared-data
-            mountPath: /backend
+            mountPath: /app
           resources:
             {{- toYaml .Values.ui.resources | nindent 12 }}
 
