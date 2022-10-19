@@ -387,3 +387,11 @@ redis:
   auth:
     enabled: false
 commonAnnotations: {}
+ui:
+  serviceAccount: {}
+  service:
+    usemetallb: false
+  ingress:
+    enabled: false
+  autoscaling:
+    enabled: false

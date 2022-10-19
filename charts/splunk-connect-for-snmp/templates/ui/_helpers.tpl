@@ -2,7 +2,7 @@
 Expand the name of the chart.
 */}}
 {{- define "splunk-connect-for-snmp.ui.name" -}}
-{{- default (printf "%s-%s" .Chart.Name "trap")  .Values.ui.nameOverride | trunc 63 | trimSuffix "-" }}
+{{- default (printf "%s-%s" .Chart.Name "ui")  .Values.ui.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
@@ -14,7 +14,7 @@ If release name contains chart name it will be used as a full name.
 {{- if .Values.ui.fullnameOverride }}
 {{- .Values.ui.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
-{{- $name := default (printf "%s-%s" .Chart.Name "trap") .Values.ui.nameOverride }}
+{{- $name := default (printf "%s-%s" .Chart.Name "ui") .Values.ui.nameOverride }}
 {{- if contains $name .Release.Name }}
 {{- .Release.Name | trunc 63 | trimSuffix "-" }}
 {{- else }}
