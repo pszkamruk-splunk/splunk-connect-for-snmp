@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "splunk-connect-for-snmp.ui.fullname" . }}
+  labels:
+    {{- include "splunk-connect-for-snmp.ui.labels" . | nindent 4 }}
+  annotations:
+  {{- if .Values.ui.service.usemetallb }}
+    metallb.universe.tf/allow-shared-ip: {{ .Values.ui.service.metallbsharingkey | default "splunk-connect" | quote }}
+  {{- end }}
+  {{- if .Values.ui.service.annotations }}
+{{ toYaml .Values.ui.service.annotations | indent 4 }}
+  {{- end }}
+  {{- if .Values.commonAnnotations }}
+{{ toYaml .Values.commonAnnotations| indent 4 }}
+  {{- end }}
+    
+spec:
+  type: {{ .Values.ui.service.type }}
+  externalTrafficPolicy: {{ .Values.ui.service.externalTrafficPolicy | default "Local" }}
+  {{- if .Values.ui.loadBalancerIP }}
+  loadBalancerIP: {{ .Values.ui.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - port: {{ .Values.ui.service.port }}
+      targetPort: 8080
+      protocol: UDP
+      name: snmp-service
+  selector:
+    {{- include "splunk-connect-for-snmp.ui.selectorLabels" . | nindent 4 }}

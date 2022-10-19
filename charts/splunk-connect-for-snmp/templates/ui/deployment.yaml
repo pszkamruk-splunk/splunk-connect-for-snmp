@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "splunk-connect-for-snmp.ui.fullname" . }}
+  labels:
+    {{- include "splunk-connect-for-snmp.ui.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.ui.autoscaling.enabled }}
+  replicas: {{ .Values.ui.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "splunk-connect-for-snmp.ui.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.ui.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "splunk-connect-for-snmp.ui.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "splunk-connect-for-snmp.ui.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.ui.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}-ui-backend
+          securityContext:
+            {{- toYaml .Values.ui.securityContext | nindent 12 }}
+          image: "react-flask-app-api:latest"
+          imagePullPolicy: Never
+          env:
+            - name: MONGO_URI
+              value: {{ include "splunk-connect-for-snmp.mongo_uri" . }}
+          ports:
+            - name: snmp-service
+              containerPort: 8080
+              protocol: UDP
+
+          resources:
+            {{- toYaml .Values.ui.resources | nindent 12 }}
+
+        - name: {{ .Chart.Name }}-ui-frontend
+          securityContext:
+            {{- toYaml .Values.ui.securityContext | nindent 12 }}
+          image: "frontend:latest"
+          imagePullPolicy: Never
+          env:
+            - name: MONGO_URI
+              value: {{ include "splunk-connect-for-snmp.mongo_uri" . }}
+          ports:
+            - name: snmp-udp
+              containerPort: 2162
+              protocol: UDP
+
+      {{- with .Values.ui.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if eq .Values.ui.podAntiAffinity "hard" }}
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - topologyKey: "kubernetes.io/hostname"
+              labelSelector:
+                matchLabels:
+                    {{- include "splunk-connect-for-snmp.ui.selectorLabels" . | nindent 22 }}
+      {{- else if eq .Values.ui.podAntiAffinity "soft" }}
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 1
+              podAffinityTerm:
+                topologyKey: kubernetes.io/hostname
+                labelSelector:
+                  matchLabels:
+                    {{- include "splunk-connect-for-snmp.ui.selectorLabels" . | nindent 22 }}
+      {{- end }}
+      {{- with .Values.ui.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

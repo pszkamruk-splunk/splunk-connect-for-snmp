@@ -1,0 +1,15 @@
+{{- if .Values.ui.networkPolicy -}}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "splunk-connect-for-snmp.ui.fullname" . }}
+  labels: 
+    {{- include "splunk-connect-for-snmp.ui.labels" . | nindent 4 }}
+spec:
+  podSelector:
+    matchLabels:
+    {{- include "splunk-connect-for-snmp.ui.selectorLabels" . | nindent 8 }}
+  policyTypes:
+    - Ingress
+    - Egress
+{{- end }}
