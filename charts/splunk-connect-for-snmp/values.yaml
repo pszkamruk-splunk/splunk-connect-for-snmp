@@ -421,7 +421,7 @@ ui:
     annotations: {}
     usemetallb: true
     metallbsharingkey: "splunk-connect"
-    type: LoadBalancer
+    type: ClusterIP
 
   ingress:
     enabled: false
