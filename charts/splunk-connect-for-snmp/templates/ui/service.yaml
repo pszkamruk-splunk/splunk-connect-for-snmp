@@ -22,9 +22,9 @@ spec:
   loadBalancerIP: {{ .Values.ui.loadBalancerIP }}
   {{- end }}
   ports:
-    - port: {{ .Values.ui.service.port }}
+    - port: 8080
       targetPort: 8080
       protocol: UDP
-      name: snmp-service
+      name: flask-port
   selector:
     {{- include "splunk-connect-for-snmp.ui.selectorLabels" . | nindent 4 }}

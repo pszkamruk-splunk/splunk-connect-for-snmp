@@ -36,10 +36,6 @@ spec:
           env:
             - name: MONGO_URI
               value: {{ include "splunk-connect-for-snmp.mongo_uri" . }}
-          ports:
-            - name: snmp-service
-              containerPort: 8080
-              protocol: UDP
 
           resources:
             {{- toYaml .Values.ui.resources | nindent 12 }}
@@ -53,8 +49,8 @@ spec:
             - name: MONGO_URI
               value: {{ include "splunk-connect-for-snmp.mongo_uri" . }}
           ports:
-            - name: snmp-udp
-              containerPort: 2162
+            - name: flask-port
+              containerPort: 8080
               protocol: UDP
 
       {{- with .Values.ui.nodeSelector }}
