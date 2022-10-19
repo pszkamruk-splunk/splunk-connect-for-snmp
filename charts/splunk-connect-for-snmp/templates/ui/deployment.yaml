@@ -36,7 +36,9 @@ spec:
           env:
             - name: MONGO_URI
               value: {{ include "splunk-connect-for-snmp.mongo_uri" . }}
-
+          volumeMounts:
+          - name: shared-data
+            mountPath: /backend
           resources:
             {{- toYaml .Values.ui.resources | nindent 12 }}
 
@@ -48,6 +50,9 @@ spec:
           env:
             - name: MONGO_URI
               value: {{ include "splunk-connect-for-snmp.mongo_uri" . }}
+          volumeMounts:
+            - name: shared-data
+              mountPath: /frontend
           ports:
             - name: flask-port
               containerPort: 8080
@@ -80,3 +85,6 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      volumes:
+        - name: shared-data
+          emptyDir: { }
