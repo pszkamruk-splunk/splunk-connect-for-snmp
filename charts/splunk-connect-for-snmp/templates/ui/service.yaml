@@ -17,7 +17,6 @@ metadata:
     
 spec:
   type: {{ .Values.ui.service.type }}
-  externalTrafficPolicy: {{ .Values.ui.service.externalTrafficPolicy | default "Local" }}
   ports:
     - port: 8080
       targetPort: 8080
