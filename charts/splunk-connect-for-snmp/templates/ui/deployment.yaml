@@ -62,7 +62,7 @@ spec:
 
       initContainers:
       - name: copy-files
-        image: myimage
+        image: "docker.io/library/react-flask-app-api:latest"
         volumeMounts:
           - name: backend-data
             mountPath: /app
