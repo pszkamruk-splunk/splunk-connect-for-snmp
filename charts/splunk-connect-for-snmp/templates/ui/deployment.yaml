@@ -52,7 +52,7 @@ spec:
           ports:
             - name: flask-port
               containerPort: 8080
-              protocol: UDP
+              protocol: TCP
       {{- with .Values.ui.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

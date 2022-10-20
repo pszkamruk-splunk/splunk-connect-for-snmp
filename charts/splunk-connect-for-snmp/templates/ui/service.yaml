@@ -20,7 +20,7 @@ spec:
   ports:
     - port: 8080
       targetPort: 8080
-      protocol: UDP
+      protocol: TCP
       name: flask-port
   selector:
     {{- include "splunk-connect-for-snmp.ui.selectorLabels" . | nindent 4 }}
