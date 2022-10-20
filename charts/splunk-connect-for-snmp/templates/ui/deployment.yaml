@@ -38,9 +38,6 @@ spec:
           env:
             - name: MONGO_URI
               value: {{ include "splunk-connect-for-snmp.mongo_uri" . }}
-          volumeMounts:
-          - name: backend-data
-            mountPath: /app
           resources:
             {{- toYaml .Values.ui.resources | nindent 12 }}
 
@@ -59,14 +56,6 @@ spec:
 {{/*            - name: flask-port*/}}
 {{/*              containerPort: 8080*/}}
 {{/*              protocol: UDP*/}}
-
-      initContainers:
-      - name: copy-files
-        image: "docker.io/library/react-flask-app-api:latest"
-        volumeMounts:
-          - name: backend-data
-            mountPath: /app
-        command: ['sh', '-c', 'cp /app/* /app']
       {{- with .Values.ui.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
