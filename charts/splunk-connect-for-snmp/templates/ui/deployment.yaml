@@ -32,15 +32,13 @@ spec:
           securityContext:
             {{- toYaml .Values.ui.securityContext | nindent 12 }}
           image: "docker.io/library/react-flask-app-api:latest"
-          command: ["gunicorn"]
-          args: ["-b", ":5000", "app"]
           imagePullPolicy: Never
           env:
             - name: MONGO_URI
               value: {{ include "splunk-connect-for-snmp.mongo_uri" . }}
           volumeMounts:
           - name: backend-data
-            mountPath: /app
+            mountPath: /
           resources:
             {{- toYaml .Values.ui.resources | nindent 12 }}
 
