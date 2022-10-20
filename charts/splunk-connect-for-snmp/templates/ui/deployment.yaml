@@ -32,8 +32,8 @@ spec:
           securityContext:
             {{- toYaml .Values.ui.securityContext | nindent 12 }}
           image: "docker.io/library/react-flask-app-api:latest"
-          command: [ "/bin/bash", "-c", "--" ]
-          args: [ "while true; do sleep 30; done;" ]
+          command: ["gunicorn"]
+          args: ["-b", ":5000", "app:app"]
           imagePullPolicy: Never
           env:
             - name: MONGO_URI
