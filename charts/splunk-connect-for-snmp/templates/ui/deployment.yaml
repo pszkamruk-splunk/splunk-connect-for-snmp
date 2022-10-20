@@ -42,21 +42,21 @@ spec:
           resources:
             {{- toYaml .Values.ui.resources | nindent 12 }}
 
-        - name: {{ .Chart.Name }}-ui-frontend
-          securityContext:
-            {{- toYaml .Values.ui.securityContext | nindent 12 }}
-          image: "frontend:latest"
-          imagePullPolicy: Never
-          env:
-            - name: MONGO_URI
-              value: {{ include "splunk-connect-for-snmp.mongo_uri" . }}
-          volumeMounts:
-            - name: frontend-data
-              mountPath: /frontend
-          ports:
-            - name: flask-port
-              containerPort: 8080
-              protocol: UDP
+{{/*        - name: {{ .Chart.Name }}-ui-frontend*/}}
+{{/*          securityContext:*/}}
+{{/*            {{- toYaml .Values.ui.securityContext | nindent 12 }}*/}}
+{{/*          image: "frontend:latest"*/}}
+{{/*          imagePullPolicy: Never*/}}
+{{/*          env:*/}}
+{{/*            - name: MONGO_URI*/}}
+{{/*              value: {{ include "splunk-connect-for-snmp.mongo_uri" . }}*/}}
+{{/*          volumeMounts:*/}}
+{{/*            - name: frontend-data*/}}
+{{/*              mountPath: /frontend*/}}
+{{/*          ports:*/}}
+{{/*            - name: flask-port*/}}
+{{/*              containerPort: 8080*/}}
+{{/*              protocol: UDP*/}}
 
       {{- with .Values.ui.nodeSelector }}
       nodeSelector:
