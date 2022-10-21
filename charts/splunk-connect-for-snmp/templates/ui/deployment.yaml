@@ -38,6 +38,8 @@ spec:
               value: {{ include "splunk-connect-for-snmp.mongo_uri" . }}
           resources:
             {{- toYaml .Values.ui.resources | nindent 12 }}
+          ports:
+            - containerPort: 5000
 
         - name: {{ .Chart.Name }}-ui-frontend
           securityContext:
