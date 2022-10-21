@@ -53,7 +53,7 @@ spec:
               value: "30500"
           ports:
             - name: flask-port
-              containerPort: 8080
+              containerPort: 30500
               protocol: TCP
       {{- with .Values.ui.nodeSelector }}
       nodeSelector:
