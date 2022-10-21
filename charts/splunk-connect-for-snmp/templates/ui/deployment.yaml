@@ -50,10 +50,10 @@ spec:
             - name: MONGO_URI
               value: {{ include "splunk-connect-for-snmp.mongo_uri" . }}
             - name: DEMO_PORT
-              value: "30500"
+              value: {{ .Values.ui.service.port | quote }}
           ports:
             - name: flask-port
-              containerPort: 30500
+              containerPort: {{ .Values.ui.service.port }}
               protocol: TCP
       {{- with .Values.ui.nodeSelector }}
       nodeSelector:

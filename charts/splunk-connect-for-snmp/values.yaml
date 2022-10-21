@@ -418,8 +418,8 @@ ui:
     runAsGroup: 10001
 
   service:
+    port: 30500
     annotations: {}
-    usemetallb: true
     metallbsharingkey: "splunk-connect"
     type: ClusterIP
 
@@ -451,7 +451,7 @@ ui:
   autoscaling:
     enabled: false
     minReplicas: 1
-    maxReplicas: 100
+    maxReplicas: 5
     targetCPUUtilizationPercentage: 80
     # targetMemoryUtilizationPercentage: 80
 

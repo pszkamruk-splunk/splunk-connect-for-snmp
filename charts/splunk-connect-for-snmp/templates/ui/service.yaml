@@ -5,9 +5,6 @@ metadata:
   labels:
     {{- include "splunk-connect-for-snmp.ui.labels" . | nindent 4 }}
   annotations:
-  {{- if .Values.ui.service.usemetallb }}
-    metallb.universe.tf/allow-shared-ip: {{ .Values.ui.service.metallbsharingkey | default "splunk-connect" | quote }}
-  {{- end }}
   {{- if .Values.ui.service.annotations }}
 {{ toYaml .Values.ui.service.annotations | indent 4 }}
   {{- end }}
@@ -16,11 +13,11 @@ metadata:
   {{- end }}
     
 spec:
-  type: {{ .Values.ui.service.type }}
+  type: NodePort
   ports:
-    - port: 30500
-      targetPort: 30500
-      nodePort: 30500
+    - port: {{ .Values.ui.service.port }}
+      targetPort: {{ .Values.ui.service.port }}
+      nodePort: {{ .Values.ui.service.port }}
       protocol: TCP
       name: flask-port
   selector:
