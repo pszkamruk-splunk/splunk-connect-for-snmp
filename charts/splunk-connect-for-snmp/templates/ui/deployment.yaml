@@ -31,7 +31,7 @@ spec:
         - name: {{ .Chart.Name }}-ui-backend
           securityContext:
             {{- toYaml .Values.ui.securityContext | nindent 12 }}
-          image: "docker.io/library/react-flask-app-api:latest"
+          image: "backend:latest"
           imagePullPolicy: Never
           env:
             - name: MONGO_URI
