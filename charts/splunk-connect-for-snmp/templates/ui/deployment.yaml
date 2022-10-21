@@ -49,6 +49,8 @@ spec:
           env:
             - name: MONGO_URI
               value: {{ include "splunk-connect-for-snmp.mongo_uri" . }}
+            - name: DEMO_PORT
+              value: "30500"
           ports:
             - name: flask-port
               containerPort: 8080
