@@ -19,6 +19,5 @@ spec:
       targetPort: {{ .Values.ui.service.port }}
       nodePort: {{ .Values.ui.service.port }}
       protocol: TCP
-      name: flask-port
   selector:
     {{- include "splunk-connect-for-snmp.ui.selectorLabels" . | nindent 4 }}
