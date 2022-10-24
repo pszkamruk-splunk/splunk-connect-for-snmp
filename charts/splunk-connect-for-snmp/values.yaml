@@ -419,6 +419,8 @@ ui:
 
   service:
     port: 30500
+    backend:
+      port: 30501
     annotations: {}
     metallbsharingkey: "splunk-connect"
     type: ClusterIP

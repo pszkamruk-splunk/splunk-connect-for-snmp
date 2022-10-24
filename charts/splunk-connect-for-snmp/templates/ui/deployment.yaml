@@ -51,6 +51,8 @@ spec:
               value: {{ include "splunk-connect-for-snmp.mongo_uri" . }}
             - name: DEMO_PORT
               value: {{ .Values.ui.service.port | quote }}
+            - name: REACT_APP_FLASK_PORT
+              value: {{ .Values.ui.service.backend.port | quote }}
       {{- with .Values.ui.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
