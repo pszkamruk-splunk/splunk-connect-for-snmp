@@ -21,7 +21,7 @@ spec:
       protocol: TCP
       name: frontend-port
     - port: 5000
-      targetPort: {{ .Values.ui.service.backend.port }}
+      targetPort: 5000
       nodePort: {{ .Values.ui.service.backend.port }}
       protocol: TCP
       name: backend-port
