@@ -19,9 +19,11 @@ spec:
       targetPort: {{ .Values.ui.service.port }}
       nodePort: {{ .Values.ui.service.port }}
       protocol: TCP
+      name: frontend_port
     - port: {{ .Values.ui.service.backend.port }}
       targetPort: {{ .Values.ui.service.backend.port }}
       nodePort: {{ .Values.ui.service.backend.port }}
       protocol: TCP
+      name: backend_port
   selector:
     {{- include "splunk-connect-for-snmp.ui.selectorLabels" . | nindent 4 }}
