@@ -53,10 +53,26 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "splunk-connect-for-snmp.traps.serviceAccountName" -}}
-{{- if .Values.traps.serviceAccount.create }}
-{{- default (include "splunk-connect-for-snmp.traps.fullname" .) .Values.traps.serviceAccount.name }}
+
+{{- define "splunk-connect-for-snmp.traps.serviceAccountCreate" -}}
+{{- if (.Values.traps.serviceAccount).create }}
+{{- default .Values.traps.serviceAccount.create }}
 {{- else }}
-{{- default "default" .Values.traps.serviceAccount.name }}
+{{- default "false" }}
+{{- end }}
+{{- end }}
+
+{{- define "splunk-connect-for-snmp.traps.serviceAccountAnnotations" -}}
+{{- if (.Values.traps.serviceAccount).annotations }}
+{{- default .Values.traps.serviceAccount.annotations }}
+{{- else }}
+{{- end }}
+{{- end }}
+
+{{- define "splunk-connect-for-snmp.traps.serviceAccountName" -}}
+{{- if (include "splunk-connect-for-snmp.traps.serviceAccountCreate" .) }}
+{{- default (include "splunk-connect-for-snmp.traps.fullname" .) (.Values.traps.serviceAccount).name }}
+{{- else }}
+{{- default "default" }}
 {{- end }}
 {{- end }}

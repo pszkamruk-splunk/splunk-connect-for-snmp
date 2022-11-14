@@ -25,8 +25,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ include "splunk-connect-for-snmp.worker.serviceAccountName" . }}
-      securityContext:
-        {{- toYaml .Values.worker.podSecurityContext | nindent 8 }}
+      securityContext: {{- (include "splunk-connect-for-snmp.podSecurityContext" . ) | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}-worker-poller
           securityContext:

@@ -95,13 +95,30 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "splunk-connect-for-snmp.worker.serviceAccountName" -}}
-{{- if .Values.worker.serviceAccount.create }}
-{{- default (include "splunk-connect-for-snmp.worker.fullname" .) .Values.worker.serviceAccount.name }}
+
+{{- define "splunk-connect-for-snmp.worker.serviceAccountCreate" -}}
+{{- if (.Values.worker.serviceAccount).create }}
+{{- default .Values.worker.serviceAccount.create }}
 {{- else }}
-{{- default "default" .Values.worker.serviceAccount.name }}
+{{- default "false" }}
 {{- end }}
 {{- end }}
+
+{{- define "splunk-connect-for-snmp.worker.serviceAccountAnnotations" -}}
+{{- if (.Values.worker.serviceAccount).annotations }}
+{{- default .Values.worker.serviceAccount.annotations }}
+{{- else }}
+{{- end }}
+{{- end }}
+
+{{- define "splunk-connect-for-snmp.worker.serviceAccountName" -}}
+{{- if (include "splunk-connect-for-snmp.worker.serviceAccountCreate" .) }}
+{{- default (include "splunk-connect-for-snmp.worker.fullname" .) (.Values.worker.serviceAccount).name  }}
+{{- else }}
+{{- default "default"}}
+{{- end }}
+{{- end }}
+
 
 {{- define "environmental-variables" -}}
 - name: CONFIG_PATH

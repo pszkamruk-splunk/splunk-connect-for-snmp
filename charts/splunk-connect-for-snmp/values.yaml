@@ -4,34 +4,70 @@
 
 replicaCount: 1
 
+################################################################################
+# SC4SNMP image settings
+################################################################################
+
 image:
+  # The registry and name of the SC4SNMP image to pull
   repository: ghcr.io/splunk/splunk-connect-for-snmp/container
+  # The policy that specifies when the user wants the SC4SNMP images to be pulled
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
 
+# Secrets to attach to the respective serviceaccount to pull docker images
 imagePullSecrets: []
 
-splunk:
-  enabled: true
 
-inventory:
+################################################################################
+# Splunk Data-to-Everything Platform configuration
+################################################################################
+
+splunk:
+  # Enables sending data to Splunk
+  enabled: true
+  # the protocol of the HEC endpoint: https or http
+  protocol: ""
+  # the port of the HEC endpoint
+  port: "8088"
+  # IP address or a domain name of a Splunk instance to send data to.
+  host: ""
+  # the protocol, host and port given here makes up to a HEC endpoint
+  # according to the pattern: {{protocol}}://{{host}}:{{port}}/services/collector
+  # for ex. https://splunk-endpoint:8088/services/collector
+
+  # Required for Splunk Enterprise/Cloud (if `enabled` is set to true). Splunk
+  # HTTP Event Collector token.
+  token: 00000000-0000-0000-0000-000000000000
+  # Whether to skip checking the certificate of the HEC endpoint when sending
+  # data over HTTPS.
+  insecureSSL: "true"
+
+################################################################################
+# Splunk Observability configuration
+################################################################################
+
+sim:
+  # Enables sending data to Splunk Observability/SignalFx.
+  enabled: false
+
+  # Splunk Observability realm to send telemetry data to.
+  signalfxToken: ""
+  # Required for Splunk Observability (if `realm` is specified). Splunk
+  # Observability org access token.
+  signalfxRealm: ""
+
   nameOverride: ""
   fullnameOverride: ""
 
   podAnnotations: {}
 
-  podSecurityContext:
-    fsGroup: 10001
+  autoscaling:
+    enabled: false
 
-  securityContext:
-    capabilities:
-      drop:
-        - ALL
-    readOnlyRootFilesystem: true
-    runAsNonRoot: true
-    runAsUser: 10001
-    runAsGroup: 10001
+  ingress:
+    enabled: false
 
   resources: {}
     # limits:
@@ -41,36 +77,41 @@ inventory:
     #   cpu: 200m
     #   memory: 256Mi
 
-  nodeSelector: {}
 
-  tolerations: []
+  service:
+    annotations: {}
+
+  secret:
+    # Option for creating a new secret or using an existing one.
+    # When secret.create=true, a new kubernetes secret will be created by the helm chart that will contain the
+    # values from sim.signalfxToken and sim.signalfxRealm.
+    # When secret.create=false, the user must set secret.name to a name of a k8s secret the user created.
+    create: true
+    name: ""
+
+################################################################################
+# SC4SNMP image settings
+################################################################################
+
+inventory:
+  nameOverride: ""
+  fullnameOverride: ""
+
+  podAnnotations: {}
+
+  resources: {}
+    # limits:
+    #   cpu: 500m
+    #   memory: 512Mi
+    # requests:
+    #   cpu: 200m
+    #   memory: 256Mi
 
 scheduler:
   nameOverride: ""
   fullnameOverride: ""
 
-  serviceAccount:
-    # Specifies whether a service account should be created
-    create: true
-    # Annotations to add to the service account
-    annotations: {}
-    # The name of the service account to use.
-    # If not set and create is true, a name is generated using the fullname template
-    name: ""
-
   podAnnotations: {}
-
-  podSecurityContext:
-    fsGroup: 10001
-
-  securityContext:
-    capabilities:
-      drop:
-        - ALL
-    readOnlyRootFilesystem: true
-    runAsNonRoot: true
-    runAsUser: 10001
-    runAsGroup: 10001
 
   resources: {}
 #     limits:
@@ -86,10 +127,6 @@ scheduler:
     maxReplicas: 100
     targetCPUUtilizationPercentage: 80
     # targetMemoryUtilizationPercentage: 80
-
-  nodeSelector: {}
-
-  tolerations: []
 
   podAntiAffinity: soft
 
@@ -142,28 +179,7 @@ worker:
   nameOverride: ""
   fullnameOverride: ""
 
-  serviceAccount:
-    # Specifies whether a service account should be created
-    create: true
-    # Annotations to add to the service account
-    annotations: {}
-    # The name of the service account to use.
-    # If not set and create is true, a name is generated using the fullname template
-    name: ""
-
   podAnnotations: {}
-
-  podSecurityContext:
-    fsGroup: 10001
-
-  securityContext:
-    capabilities:
-      drop:
-        - ALL
-    readOnlyRootFilesystem: true
-    runAsNonRoot: true
-    runAsUser: 10001
-    runAsGroup: 10001
 
   resources:
      limits:
@@ -180,69 +196,12 @@ worker:
     targetCPUUtilizationPercentage: 80
     # targetMemoryUtilizationPercentage: 80
 
-  nodeSelector: {}
-
-  tolerations: []
-
   podAntiAffinity: soft
 
 poller:
   usernameSecrets: []
 
-sim:
-  enabled: false
-  nameOverride: ""
-  fullnameOverride: ""
 
-  podAnnotations: {}
-
-  autoscaling:
-    enabled: false
-
-  podSecurityContext:
-    fsGroup: 10001
-  ingress:
-    enabled: false
-  securityContext:
-    allowPrivilegeEscalation: false
-    capabilities:
-      drop:
-        - ALL
-    readOnlyRootFilesystem: true
-    runAsNonRoot: true
-    runAsUser: 10001
-    runAsGroup: 10001
-
-  resources: {}
-    # limits:
-    #   cpu: 500m
-    #   memory: 512Mi
-    # requests:
-    #   cpu: 200m
-    #   memory: 256Mi
-
-  nodeSelector: {}
-
-  tolerations: []
-  serviceAccount:
-    # Specifies whether a service account should be created
-    create: false
-    # Annotations to add to the service account
-    annotations: { }
-    # The name of the service account to use.
-    # If not set and create is true, a name is generated using the fullname template
-    name: ""
-
-  service:
-    annotations: {}
-
-  secret:
-    # Option for creating a new secret or using an existing one.
-    # When secret.create=true, a new kubernetes secret will be created by the helm chart that will contain the
-    # values from sim.signalfxToken and sim.signalfxRealm.
-    # When secret.create=false, the user must set secret.name to a name of a k8s secret the user created.
-    create: true
-    name: ""
 traps:
   replicaCount: 2
   usernameSecrets: []
@@ -253,28 +212,7 @@ traps:
   nameOverride: ""
   fullnameOverride: ""
 
-  serviceAccount:
-    # Specifies whether a service account should be created
-    create: true
-    # Annotations to add to the service account
-    annotations: {}
-    # The name of the service account to use.
-    # If not set and create is true, a name is generated using the fullname template
-    name: ""
-
   podAnnotations: {}
-
-  podSecurityContext:
-    fsGroup: 10001
-
-  securityContext:
-    capabilities:
-      drop:
-        - ALL
-    readOnlyRootFilesystem: true
-    runAsNonRoot: true
-    runAsUser: 10001
-    runAsGroup: 10001
 
   service:
     annotations: {}
@@ -315,9 +253,7 @@ traps:
     targetCPUUtilizationPercentage: 80
     # targetMemoryUtilizationPercentage: 80
 
-  nodeSelector: {}
-
-  tolerations: []
+  
 
   podAntiAffinity: soft
 

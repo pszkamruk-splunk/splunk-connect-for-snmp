@@ -53,10 +53,33 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "splunk-connect-for-snmp.scheduler.serviceAccountName" -}}
-{{- if .Values.scheduler.serviceAccount.create }}
-{{- default (include "splunk-connect-for-snmp.scheduler.fullname" .) .Values.scheduler.serviceAccount.name }}
+
+
+{{/*
+Create the name of the service account to use
+*/}}
+
+{{- define "splunk-connect-for-snmp.scheduler.serviceAccountCreate" -}}
+{{- if (.Values.scheduler.serviceAccount).create }}
+{{- default .Values.scheduler.serviceAccount.create }}
 {{- else }}
-{{- default "default" .Values.scheduler.serviceAccount.name }}
+{{- default "false" }}
 {{- end }}
 {{- end }}
+
+{{- define "splunk-connect-for-snmp.scheduler.serviceAccountAnnotations" -}}
+{{- if (.Values.scheduler.serviceAccount).annotations }}
+{{- default .Values.scheduler.serviceAccount.annotations }}
+{{- else }}
+{{- default nil }}
+{{- end }}
+{{- end }}
+
+{{- define "splunk-connect-for-snmp.scheduler.serviceAccountName" -}}
+{{- if (include "splunk-connect-for-snmp.scheduler.serviceAccountCreate" .) }}
+{{- default (include "splunk-connect-for-snmp.scheduler.fullname" .) (.Values.scheduler.serviceAccount).name }}
+{{- else }}
+{{- default "default" }}
+{{- end }}
+{{- end }}
+

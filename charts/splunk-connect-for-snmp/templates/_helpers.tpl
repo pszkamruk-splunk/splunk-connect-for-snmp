@@ -17,3 +17,27 @@
 {{- define "splunk-connect-for-snmp.name" -}}
 {{- default (printf "%s" .Chart.Name ) .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
+
+{{- define "splunk-connect-for-snmp.podSecurityContext" }}
+{{- if .Values.podSecurityContext }}
+{{ .Values.podSecurityContext }}
+{{- else }}
+podSecurityContext:
+  fsGroup: 10001
+{{- end }}
+{{- end }}
+
+
+{{- define "splunk-connect-for-snmp.securityContext" }}
+{{- if .Values.securityContext }}
+{{ .Values.securityContext }}
+{{- else }}
+    capabilities:
+      drop:
+        - ALL
+    readOnlyRootFilesystem: true
+    runAsNonRoot: true
+    runAsUser: 10001
+    runAsGroup: 10001
+{{- end }}
+{{- end }}
