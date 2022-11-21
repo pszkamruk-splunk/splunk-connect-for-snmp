@@ -60,7 +60,7 @@ spec:
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- if eq .Values.worker.podAntiAffinity "hard" }}
+      {{- if eq ( include "splunk-connect-for-snmp.worker.podAntiAffinity" . ) "hard" }}
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -68,7 +68,7 @@ spec:
               labelSelector:
                 matchLabels:
                     {{- include "splunk-connect-for-snmp.worker.sender.selectorLabels" . | nindent 22 }}
-      {{- else if eq .Values.worker.podAntiAffinity "soft" }}
+      {{- else if eq ( include "splunk-connect-for-snmp.worker.podAntiAffinity" . ) "soft" }}
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:

@@ -5,9 +5,7 @@ metadata:
   labels:
     {{- include "splunk-connect-for-snmp.scheduler.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.scheduler.autoscaling.enabled }}
   replicas: {{ .Values.scheduler.replicaCount }}
-  {{- end }}
   selector:
     matchLabels:
       {{- include "splunk-connect-for-snmp.scheduler.selectorLabels" . | nindent 6 }}
@@ -26,11 +24,11 @@ spec:
       {{- end }}
       serviceAccountName: {{ include "splunk-connect-for-snmp.scheduler.serviceAccountName" . }}
       securityContext:
-        {{- toYaml .Values.scheduler.podSecurityContext | nindent 8 }}
+        {{- ( include "splunk-connect-for-snmp.securityContext" . ) | nindent 6 }}
       containers:
         - name: {{ .Chart.Name }}-scheduler
           securityContext:
-            {{- toYaml .Values.scheduler.securityContext | nindent 12 }}
+            {{- ( include "splunk-connect-for-snmp.securityContext" . )  | nindent 10 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           args:
@@ -77,7 +75,7 @@ spec:
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- if eq .Values.scheduler.podAntiAffinity "hard" }}
+      {{- if eq ( include "splunk-connect-for-snmp.scheduler.podAntiAffinity" . ) "hard" }}
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -85,7 +83,7 @@ spec:
               labelSelector:
                 matchLabels:
                     {{- include "splunk-connect-for-snmp.scheduler.selectorLabels" . | nindent 22 }}
-      {{- else if eq .Values.scheduler.podAntiAffinity "soft" }}
+      {{- else if eq ( include "splunk-connect-for-snmp.scheduler.podAntiAffinity" . ) "soft" }}
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:

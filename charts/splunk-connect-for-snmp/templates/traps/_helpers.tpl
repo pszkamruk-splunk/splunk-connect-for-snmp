@@ -76,3 +76,20 @@ Create the name of the service account to use
 {{- default "default" }}
 {{- end }}
 {{- end }}
+
+{{- define "splunk-connect-for-snmp.traps.podAntiAffinity" -}}
+{{- if (.Values.traps.podAntiAffinity) }}
+{{- default .Values.traps.podAntiAffinity }}
+{{- else }}
+{{- default "soft" }}
+{{- end }}
+{{- end }}
+
+{{/*
+Define autoscaling for sim
+*/}}
+{{- define "splunk-connect-for-snmp.traps.autoscaling" -}}
+{{- if (.Values.sim.autoscaling).enabled -}}
+{{- .Values.sim.autoscaling.enabled -}}
+{{- end -}}
+{{- end -}}

@@ -41,3 +41,11 @@ podSecurityContext:
     runAsGroup: 10001
 {{- end }}
 {{- end }}
+
+{{- define "splunk-connect-for-snmp.worker.podAntiAffinity" -}}
+{{- if (.Values.worker.podAntiAffinity) }}
+{{- default .Values.worker.podAntiAffinity }}
+{{- else }}
+{{- default "soft" }}
+{{- end }}
+{{- end }}

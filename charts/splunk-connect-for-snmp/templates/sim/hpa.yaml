@@ -1,5 +1,5 @@
-{{- if .Values.sim.autoscaling.enabled }}
-apiVersion: autoscaling/v2beta1
+{{- if ( include "splunk-connect-for-snmp.sim.autoscaling" . ) }}
+apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "splunk-connect-for-snmp.sim.fullname" . }}
@@ -10,19 +10,15 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: {{ include "splunk-connect-for-snmp.sim.fullname" . }}
-  minReplicas: {{ .Values.sim.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.sim.autoscaling.maxReplicas }}
+  minReplicas: {{ .Values.sim.autoscaling.minReplicas | default 2 }}
+  maxReplicas: {{ .Values.sim.autoscaling.maxReplicas | default 10 }}
   metrics:
     {{- if .Values.sim.autoscaling.targetCPUUtilizationPercentage }}
     - type: Resource
       resource:
         name: cpu
-        targetAverageUtilization: {{ .Values.sim.autoscaling.targetCPUUtilizationPercentage }}
-    {{- end }}
-    {{- if .Values.sim.autoscaling.targetMemoryUtilizationPercentage }}
-    - type: Resource
-      resource:
-        name: memory
-        targetAverageUtilization: {{ .Values.sim.autoscaling.targetMemoryUtilizationPercentage }}
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.sim.autoscaling.targetCPUUtilizationPercentage }}
     {{- end }}
 {{- end }}

@@ -10,8 +10,8 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: {{ include "splunk-connect-for-snmp.worker.fullname" . }}-poller
-  minReplicas: {{ .Values.worker.poller.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.worker.poller.autoscaling.maxReplicas }}
+  minReplicas: {{ .Values.worker.poller.autoscaling.minReplicas | default 2 }}
+  maxReplicas: {{ .Values.worker.poller.autoscaling.maxReplicas | default 10}}
   metrics:
     {{- if .Values.worker.poller.autoscaling.targetCPUUtilizationPercentage }}
     - type: Resource

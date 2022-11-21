@@ -83,3 +83,10 @@ Create the name of the service account to use
 {{- end }}
 {{- end }}
 
+{{- define "splunk-connect-for-snmp.scheduler.podAntiAffinity" -}}
+{{- if (.Values.scheduler.podAntiAffinity) }}
+{{- default .Values.scheduler.podAntiAffinity }}
+{{- else }}
+{{- default "soft" }}
+{{- end }}
+{{- end }}

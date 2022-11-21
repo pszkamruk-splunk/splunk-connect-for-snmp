@@ -90,3 +90,12 @@ Define name for the Splunk Secret
 {{- end -}}
 {{- end -}}
 
+
+{{/*
+Define autoscaling for sim
+*/}}
+{{- define "splunk-connect-for-snmp.sim.autoscaling" -}}
+{{- if (.Values.sim.autoscaling).enabled -}}
+{{- .Values.sim.autoscaling.enabled -}}
+{{- end -}}
+{{- end -}}
