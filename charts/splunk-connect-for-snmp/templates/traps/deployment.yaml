@@ -5,7 +5,7 @@ metadata:
   labels:
     {{- include "splunk-connect-for-snmp.traps.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.traps.autoscaling.enabled }}
+  {{- if not ( include "splunk-connect-for-snmp.traps.autoscaling" . ) }}
   replicas: {{ .Values.traps.replicaCount }}
   {{- end }}
   selector:

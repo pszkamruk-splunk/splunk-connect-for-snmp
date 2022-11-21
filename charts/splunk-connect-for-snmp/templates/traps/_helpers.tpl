@@ -89,7 +89,7 @@ Create the name of the service account to use
 Define autoscaling for sim
 */}}
 {{- define "splunk-connect-for-snmp.traps.autoscaling" -}}
-{{- if (.Values.sim.autoscaling).enabled -}}
+{{- if (.Values.traps.autoscaling).enabled -}}
 {{- .Values.sim.autoscaling.enabled -}}
 {{- end -}}
 {{- end -}}
