@@ -15,6 +15,11 @@ data:
       signalfx:
         access_token: $signalfxToken
         realm: $signalfxRealm
+      splunk_hec:
+        endpoint: https://ingest.us1.signalfx.com/v1/log
+        token: $signalfxToken
+        tls:
+          insecure_skip_verify: true
     service:
       pipelines:
         metrics:
@@ -22,5 +27,5 @@ data:
           exporters: [signalfx]
         logs:
           receivers: [splunk_hec/logs]
-          exporters: [signalfx]
+          exporters: [splunk_hec]
 {{- end }}
