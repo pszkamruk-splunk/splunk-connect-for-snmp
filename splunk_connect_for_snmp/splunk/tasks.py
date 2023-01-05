@@ -72,6 +72,7 @@ else:
     SPLUNK_HEC_TLSVERIFY = True
 
 OTEL_METRICS_URL = os.getenv("OTEL_METRICS_URL", None)
+OTEL_EVENTS_URL = os.getenv("OTEL_EVENTS_URL", None)
 
 logger = get_task_logger(__name__)
 
@@ -118,6 +119,7 @@ def send(self, data):
         do_send(data["metrics"], SPLUNK_HEC_URI, self)
     if OTEL_METRICS_URL:
         do_send(data["metrics"], OTEL_METRICS_URL, self)
+        do_send(data["events"], OTEL_EVENTS_URL, self)
 
 
 def do_send(data, destination_url, self):
