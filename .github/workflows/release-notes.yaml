@@ -1,15 +1,15 @@
-name: Release-Notes-Preview
+# name: Release-Notes-Preview
 
-on:
-  pull_request:
-  issue_comment:
-    types: [ edited ]
+# on:
+#   pull_request:
+#   issue_comment:
+#     types: [ edited ]
 
-jobs:
-  call-workflow-preview:
-    permissions:
-      contents: write
-      packages: write
-    uses: splunk/addonfactory-github-workflows/.github/workflows/reusable-release-notes.yaml@v1.2.1
-    secrets:
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+# jobs:
+#   call-workflow-preview:
+#     permissions:
+#       contents: write
+#       packages: write
+#     uses: splunk/addonfactory-github-workflows/.github/workflows/reusable-release-notes.yaml@v1.2.1
+#     secrets:
+#       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
