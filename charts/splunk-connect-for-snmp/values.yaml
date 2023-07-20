@@ -50,7 +50,12 @@ splunk:
   # sourcetype for metric polling event
   sourcetypePollingMetrics: "sc4snmp:metric"
 
+  # name of the event index
+  eventIndex: "netops"
 
+  # name of the metrics index
+  metricsIndex: "netmetrics"
+  
 ################################################################################
 # Splunk Observability configuration
 ################################################################################
